@@ -1,0 +1,86 @@
+import java.awt.*;
+import java.io.*;
+import javax.swing.*;
+
+public class VisualNovelGUI extends JFrame {
+   private JLabel imageLabel;
+   private JLabel textLabel;
+   private String script;
+   private int imageIndex = 0;
+   private ImageIcon[] images;
+   
+   public VisualNovelGUI() {
+      // Set the window title and size
+      setTitle("My Visual Novel");
+      setSize(400, 300);
+      
+      // Create a panel for the image and text
+      JPanel panel = new JPanel();
+      panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+      
+      // Load the images from files
+      images = new ImageIcon[3];
+      images[0] = new ImageIcon("image1.png");
+      images[1] = new ImageIcon("image2.png");
+      images[2] = new ImageIcon("image3.png");
+      
+      // Create a label for the first image
+      imageLabel = new JLabel(images[imageIndex]);
+      imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+      panel.add(imageLabel);
+      
+      // Load the script from a file
+      loadScript("script.txt");
+      
+      // Create a label for the text
+      textLabel = new JLabel(script);
+      textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+      panel.add(textLabel);
+      
+      // Add the panel to the window
+      add(panel);
+      
+      // Center the window on the screen
+      setLocationRelativeTo(null);
+      
+      // Exit the program when the window is closed
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+   }
+   
+   private void loadScript(String filename) {
+      try {
+         // Open the file
+         BufferedReader reader = new BufferedReader(new FileReader(filename));
+         
+         // Read the text from the file
+         script = "";
+         String line;
+         while ((line = reader.readLine()) != null) {
+            script += line + "\n";
+         }
+         
+         // Close the file
+         reader.close();
+      } catch (IOException e) {
+         System.err.println("Error reading script file: " + e.getMessage());
+      }
+   }
+   
+   public void nextImage() {
+      // Increment the image index
+      imageIndex++;
+      
+      // Wrap around to the beginning if we've reached the end
+      if (imageIndex >= images.length) {
+         imageIndex = 0;
+      }
+      
+      // Update the image label
+      imageLabel.setIcon(images[imageIndex]);
+   }
+   
+   public static void main(String[] args) {
+      VisualNovelGUI gui = new VisualNovelGUI();
+      gui.setVisible(true);
+   }
+}
